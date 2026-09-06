@@ -1,0 +1,30 @@
+diff --git a/inference.py b/inference.py
+index 84d673b..023ac22 100644
+--- a/inference.py
++++ b/inference.py
+@@ -18,6 +18,7 @@ from modules.commons import *
+ import time
+ 
+ import torchaudio
++import soundfile as sf
+ import librosa
+ from modules.commons import str2bool
+ 
+@@ -404,7 +405,8 @@ def main(args):
+     source_name = os.path.basename(source).split(".")[0]
+     target_name = os.path.basename(target_name).split(".")[0]
+     os.makedirs(args.output, exist_ok=True)
+-    torchaudio.save(os.path.join(args.output, f"vc_{source_name}_{target_name}_{length_adjust}_{diffusion_steps}_{inference_cfg_rate}.wav"), vc_wave.cpu(), sr)
++    output_path = args.output_file or os.path.join(args.output, f"vc_{source_name}_{target_name}_{length_adjust}_{diffusion_steps}_{inference_cfg_rate}.wav")
++    sf.write(output_path, vc_wave.squeeze().cpu().numpy(), sr, subtype="PCM_16")
+ 
+ 
+ if __name__ == "__main__":
+@@ -412,6 +414,7 @@ if __name__ == "__main__":
+     parser.add_argument("--source", type=str, default="./examples/source/source_s1.wav")
+     parser.add_argument("--target", type=str, default="./examples/reference/s1p1.wav")
+     parser.add_argument("--output", type=str, default="./reconstructed")
++    parser.add_argument("--output-file", type=str, default=None)
+     parser.add_argument("--diffusion-steps", type=int, default=30)
+     parser.add_argument("--length-adjust", type=float, default=1.0)
+     parser.add_argument("--inference-cfg-rate", type=float, default=0.7)

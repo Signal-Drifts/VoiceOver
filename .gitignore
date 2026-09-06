@@ -1,0 +1,10 @@
+.build/
+.build-current/
+dist/
+.DS_Store
+artifacts/*
+!artifacts/voiceover-logo.svg
+third_party/seed-vc/
+handoverdoc.md
+Triffen-design-removed-2026-08-29/
+design/
