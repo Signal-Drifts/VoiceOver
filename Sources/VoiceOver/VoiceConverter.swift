@@ -128,6 +128,13 @@ enum VoiceConverter {
         process.standardError = logHandle
         var environment = ProcessInfo.processInfo.environment
         environment["PYTHONUNBUFFERED"] = "1"
+        environment["PYTHONDONTWRITEBYTECODE"] = "1"
+        let cache = scratch.appendingPathComponent("cache", isDirectory: true)
+        try FileManager.default.createDirectory(at: cache, withIntermediateDirectories: true)
+        environment["XDG_CACHE_HOME"] = cache.path
+        environment["HF_HOME"] = cache.appendingPathComponent("huggingface", isDirectory: true).path
+        environment["TORCH_HOME"] = cache.appendingPathComponent("torch", isDirectory: true).path
+        environment["NUMBA_CACHE_DIR"] = cache.appendingPathComponent("numba", isDirectory: true).path
         process.environment = environment
 
         try Task.checkCancellation()

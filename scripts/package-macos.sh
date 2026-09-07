@@ -55,6 +55,10 @@ version_info = 3.10
 include-system-site-packages = false
 PYVENV
 
+# Python must never mutate the sealed application bundle at runtime.
+find "$runtime" -type d -name __pycache__ -prune -exec rm -rf {} +
+find "$runtime" -type f \( -name '*.pyc' -o -name '*.pyo' \) -delete
+
 while IFS= read -r -d '' candidate; do
     if file -b "$candidate" | grep -q 'Mach-O'; then
         codesign --force --options runtime --timestamp --sign "$identity" "$candidate"
