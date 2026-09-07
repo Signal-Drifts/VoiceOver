@@ -59,6 +59,18 @@ PYVENV
 find "$runtime" -type d -name __pycache__ -prune -exec rm -rf {} +
 find "$runtime" -type f \( -name '*.pyc' -o -name '*.pyo' \) -delete
 
+# Seed-VC inference does not use the upstream demo, notebook, training, or web UI packages.
+site_packages="$runtime/venv/lib/python3.10/site-packages"
+find "$site_packages" -mindepth 1 -maxdepth 1 \( \
+    -name 'gradio*' -o -name 'pandas*' -o -name 'sklearn*' -o -name 'scikit_learn*' -o \
+    -name 'grpc*' -o -name 'jedi*' -o -name 'ipython*' -o -name 'IPython*' -o \
+    -name 'modelscope*' -o -name 'resemblyzer*' -o \
+    -name 'Crypto*' -o -name 'pycryptodome*' -o \
+    -name 'cryptography*' -o -name 'torchvision*' -o -name 'FreeSimpleGUI*' -o \
+    -name 'fastapi*' -o -name 'starlette*' -o -name 'uvicorn*' -o -name 'jupyter*' -o \
+    -name 'notebook*' -o -name 'jieba*' \
+\) -exec rm -rf {} +
+
 while IFS= read -r -d '' candidate; do
     if file -b "$candidate" | grep -q 'Mach-O'; then
         codesign --force --options runtime --timestamp --sign "$identity" "$candidate"

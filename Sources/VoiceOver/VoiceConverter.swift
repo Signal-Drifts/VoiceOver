@@ -133,6 +133,8 @@ enum VoiceConverter {
         try FileManager.default.createDirectory(at: cache, withIntermediateDirectories: true)
         environment["XDG_CACHE_HOME"] = cache.path
         environment["HF_HOME"] = cache.appendingPathComponent("huggingface", isDirectory: true).path
+        environment["HF_HUB_OFFLINE"] = "1"
+        environment["TRANSFORMERS_OFFLINE"] = "1"
         environment["TORCH_HOME"] = cache.appendingPathComponent("torch", isDirectory: true).path
         environment["NUMBA_CACHE_DIR"] = cache.appendingPathComponent("numba", isDirectory: true).path
         process.environment = environment
